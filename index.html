@@ -123,20 +123,23 @@ body:hover #webgl-canvas {
     opacity: 0.9;
 }
 
-/* ========== PRELOADER ========== */
+/* ========== PRELOADER - MODERN DESIGN ========== */
 #preloader {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: var(--bg-dark);
+    background: radial-gradient(circle at 20% 50%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 50%, rgba(6, 182, 212, 0.1) 0%, transparent 50%),
+                linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-darker) 100%);
     z-index: 99999;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    transition: opacity 0.8s ease;
+    transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    gap: 3rem;
 }
 
 #preloader.hidden {
@@ -144,38 +147,130 @@ body:hover #webgl-canvas {
     pointer-events: none;
 }
 
-.loader-text {
-    font-family: 'Clash Display', sans-serif;
-    font-size: 2.5rem;
-    color: var(--secondary);
-    letter-spacing: 8px;
-    margin-bottom: 2rem;
-    text-transform: uppercase;
-    text-shadow: var(--glow-primary);
-    animation: pulse 2s infinite;
+/* Animated Circles Container */
+.loader-circles {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
+.loader-circle {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    border: 3px solid transparent;
+    border-radius: 50%;
+    animation: spinRotate 3s linear infinite;
+}
+
+.loader-circle:nth-child(1) {
+    border-top-color: var(--primary);
+    border-right-color: var(--secondary);
+    animation-duration: 1.5s;
+}
+
+.loader-circle:nth-child(2) {
+    width: 70px;
+    height: 70px;
+    border-top-color: var(--secondary);
+    border-left-color: var(--primary);
+    animation-direction: reverse;
+    animation-duration: 2s;
+}
+
+.loader-circle:nth-child(3) {
+    width: 50px;
+    height: 50px;
+    border-bottom-color: var(--accent);
+    border-right-color: var(--primary);
+    animation-duration: 2.5s;
+}
+
+.loader-center {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background: radial-gradient(circle, var(--primary), var(--secondary));
+    border-radius: 50%;
+    box-shadow: 0 0 20px var(--glow-primary), inset 0 0 10px rgba(139, 92, 246, 0.5);
+}
+
+@keyframes spinRotate {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Loader Text */
+.loader-text {
+    font-family: 'Clash Display', sans-serif;
+    font-size: 1.8rem;
+    color: var(--text-main);
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    font-weight: 600;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: textPulse 2s ease-in-out infinite;
+}
+
+.loader-subtext {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    animation: fadeInOut 2s ease-in-out infinite;
+}
+
+/* Progress Bar - Enhanced */
 .loader-bar {
-    width: 300px;
-    height: 6px;
+    width: 250px;
+    height: 4px;
     background: var(--border);
     border-radius: 10px;
     overflow: hidden;
     position: relative;
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
 }
 
 .loader-fill {
     height: 100%;
-    background: var(--gradient-primary);
+    background: linear-gradient(90deg, var(--primary), var(--secondary), var(--primary));
     width: 0%;
-    transition: width 0.3s ease;
-    box-shadow: var(--glow-primary);
+    transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 0 15px var(--glow-primary);
     border-radius: 10px;
+    position: relative;
 }
 
-@keyframes pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.5; transform: scale(1.05); }
+.loader-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+@keyframes textPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+@keyframes fadeInOut {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
 }
 
 /* ========== NAVIGATION (FIXED: Max Width Container) ========== */
@@ -209,6 +304,43 @@ nav.admin-active .nav-links {
     gap: 8px;
 }
 .nav-admin-btn.hidden { display: none !important; }
+
+/* Password Input Wrapper - Eye Icon */
+.password-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.password-wrapper input {
+    padding-right: 45px !important;
+}
+
+.eye-toggle {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #94a3b8;
+    cursor: pointer;
+    font-size: 1.2rem;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    opacity: 0.7;
+}
+
+.eye-toggle:hover {
+    opacity: 1;
+    color: #8b5cf6;
+}
+
+.eye-toggle:active {
+    transform: translateY(-50%) scale(0.9);
+}
 
 nav::before {
     content: '';
@@ -296,13 +428,13 @@ html[data-theme="light"] nav.nav-minimal {
 }
 
 @keyframes logoPulseAdvanced {
-    0%, 100% { 
-        transform: scale(1) rotate(0deg); 
-        opacity: 1; 
+    0%, 100% {
+        transform: scale(1) rotate(0deg);
+        opacity: 1;
     }
-    50% { 
-        transform: scale(1.5) rotate(180deg); 
-        opacity: 0.5; 
+    50% {
+        transform: scale(1.5) rotate(180deg);
+        opacity: 0.5;
     }
 }
 
@@ -531,41 +663,41 @@ nav.nav-minimal .nav-icon-btn {
 }
 
 @keyframes aiPulse {
-    0%, 100% { 
+    0%, 100% {
         transform: scale(1);
         opacity: 0.5;
     }
-    50% { 
+    50% {
         transform: scale(1.1);
         opacity: 0.8;
     }
 }
 
 @keyframes aiPulseIntense {
-    0%, 100% { 
+    0%, 100% {
         transform: scale(1);
         opacity: 1;
     }
-    50% { 
+    50% {
         transform: scale(1.2);
         opacity: 0.6;
     }
 }
 
 @keyframes aiFloat {
-    0%, 100% { 
+    0%, 100% {
         transform: translateY(0px);
     }
-    50% { 
+    50% {
         transform: translateY(-3px);
     }
 }
 
 @keyframes aiBounce {
-    0%, 100% { 
+    0%, 100% {
         transform: scale(1.15) rotate(10deg);
     }
-    50% { 
+    50% {
         transform: scale(1.25) rotate(15deg);
     }
 }
@@ -1594,7 +1726,7 @@ font-size: 0.875rem;
         height: 65px;
         padding: 0;
     }
-    
+   
     .nav-container {
         padding: 0 25px;
     }
@@ -1614,9 +1746,9 @@ font-size: 0.875rem;
 
     h1 { font-size: 3rem; }
     h2 { font-size: 2.2rem; }
-    
+   
     section { padding: 60px 30px; }
-    
+   
     .contact-layout {
         grid-template-columns: 1fr;
         gap: 3rem;
@@ -1625,7 +1757,7 @@ font-size: 0.875rem;
     .skills-grid {
         grid-template-columns: repeat(2, 1fr);
     }
-    
+   
     /* FIX #9: Semantic DL Grid Support */
     dl.stats-section {
         grid-template-columns: repeat(2, 1fr); /* Tablet Specific: 2 Cols */
@@ -1643,7 +1775,7 @@ font-size: 0.875rem;
         height: 60px;
         padding: 0;
     }
-    
+   
     .nav-container {
         padding: 0 20px;
     }
@@ -1690,13 +1822,13 @@ font-size: 0.875rem;
 
     h1 { font-size: 2.5rem; }
     h2 { font-size: 1.8rem; }
-    
+   
     section { padding: 50px 25px; }
 
     .skills-grid {
         grid-template-columns: repeat(2, 1fr);
     }
-    
+   
     .services-grid {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -1709,11 +1841,11 @@ font-size: 0.875rem;
         grid-template-columns: 1fr;
         gap: 2rem;
     }
-    
+   
     .footer-content {
         grid-template-columns: 1fr;
     }
-    
+   
     .ai-chat-window {
         width: 100vw;
         height: 100vh;
@@ -1729,7 +1861,7 @@ font-size: 0.875rem;
         height: 55px;
         padding: 0;
     }
-    
+   
     .nav-container {
         padding: 0 15px;
     }
@@ -1753,7 +1885,7 @@ font-size: 0.875rem;
         z-index: 999;
         border-bottom: 1px solid var(--border);
     }
-    
+   
     html[data-theme="light"] .nav-links {
         background: rgba(248, 250, 252, 0.98);
     }
@@ -1767,13 +1899,13 @@ font-size: 0.875rem;
         height: 40px;
         padding: 8px;
     }
-    
+   
     .mobile-menu-toggle {
         display: flex;
         width: 28px;
         height: 20px;
     }
-    
+   
     .nav-actions {
         margin-right: 35px;
     }
@@ -1798,7 +1930,7 @@ font-size: 0.875rem;
     h1 { font-size: 1.8rem; }
     h2 { font-size: 1.4rem; }
     h3 { font-size: 1.1rem; }
-    
+   
     section { padding: 40px 15px; }
 
     .skills-grid, .services-grid {
@@ -1810,17 +1942,17 @@ font-size: 0.875rem;
         grid-template-columns: 1fr;
         gap: 2rem;
     }
-    
+   
     #desktop-estimator {
         max-height: 75vh;
         padding: 15px !important;
     }
-    
+   
     #pricing-chat-body {
         min-height: 250px !important;
         max-height: 350px !important;
     }
-    
+   
     #pricing-input {
         font-size: 16px !important;
     }
@@ -1864,11 +1996,62 @@ font-size: 0.875rem;
         font-size: clamp(1.5rem, 6vw, 2rem);
     }
 }
+
+/* ========== FIRESTORE LOAD STATE (Hide until loaded) ========== */
+body {
+    visibility: hidden;
+    opacity: 0;
+}
+
+body.firestore-loading {
+    opacity: 0.5;
+    pointer-events: none;
+    visibility: visible;
+}
+
+body.firestore-loaded {
+    opacity: 1;
+    pointer-events: auto;
+    visibility: visible;
+    transition: opacity 0.3s ease;
+}
+
+.firestore-load-indicator {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(139, 92, 246, 0.2);
+    border: 2px solid var(--primary);
+    border-radius: 12px;
+    padding: 2rem;
+    text-align: center;
+    z-index: 10000;
+    display: none;
+}
+
+body.firestore-loading .firestore-load-indicator {
+    display: block;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    50% { opacity: 0.7; transform: translate(-50%, -50%) scale(1.05); }
+}
+
 </style>
 </head>
 <body>
 <!-- SCROLL PROGRESS BAR -->
 <div id="scroll-progress" style="position: fixed; top: 0; left: 0; height: 3px; width: 0%; background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%); z-index: 1000; box-shadow: 0 0 20px rgba(139, 92, 246, 0.6);"></div>
+
+<!-- FIRESTORE LOADING INDICATOR -->
+<div class="firestore-load-indicator">
+    <div style="font-size: 2rem; margin-bottom: 1rem;">⚡</div>
+    <div style="color: var(--primary); font-weight: 600;">Loading Latest Content...</div>
+    <div style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">Fetching from Firestore</div>
+</div>
 
 <!-- UPDATED NAVIGATION (Clean, Max-Width Container) -->
 <nav id="nav">
@@ -1896,11 +2079,11 @@ font-size: 0.875rem;
                     <path d="M19.07 4.93l-2.83 2.83M7.76 16.24l-2.83 2.83M19.07 19.07l-2.83-2.83M7.76 7.76L4.93 4.93"></path>
                 </svg>
             </button>
-            
+           
             <button class="nav-icon-btn" id="theme-toggle" aria-label="Switch Theme" title="Switch Theme">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
             </button>
-            
+           
             <!-- Mobile Toggle -->
             <button class="mobile-menu-toggle" id="mobile-toggle" aria-label="Toggle Navigation Menu">
                 <span></span><span></span><span></span>
@@ -1909,13 +2092,26 @@ font-size: 0.875rem;
                 <button id="admin-stealth-btn" class="hidden nav-admin-btn" aria-label="Admin Access" title="Admin Access">🔒 ADMIN</button>
                 <button id="admin-edit-btn" class="hidden nav-admin-btn" aria-label="Toggle Edit Mode" title="Toggle Edit Mode">✏️ EDIT</button>
                 <button id="admin-save-btn" class="hidden nav-admin-btn" aria-label="Save Changes" title="Save Changes">SAVE</button>
+                <div id="admin-status-indicator" class="hidden" style="padding: 8px 12px; background: rgba(16, 185, 129, 0.2); border: 1px solid #10b981; border-radius: 6px; font-size: 12px; color: #10b981; max-height: 200px; overflow-y: auto; margin-left: 10px;"></div>
         </div>
     </div>
 </nav>
 
-<!-- Preloader -->
+<!-- Preloader - Modern Design -->
 <div id="preloader">
-    <div class="loader-text">LOADING</div>
+    <!-- Animated Circles -->
+    <div class="loader-circles">
+        <div class="loader-circle"></div>
+        <div class="loader-circle"></div>
+        <div class="loader-circle"></div>
+        <div class="loader-center"></div>
+    </div>
+   
+    <!-- Text -->
+    <div class="loader-text">INITIALIZING</div>
+    <div class="loader-subtext">Loading Elite Experience</div>
+   
+    <!-- Progress Bar -->
     <div class="loader-bar">
         <div class="loader-fill" id="loader-fill"></div>
     </div>
@@ -1929,16 +2125,9 @@ font-size: 0.875rem;
 <!-- Hero (UPDATED: Max Width Container) -->
 <section class="hero" id="main-content">
     <div class="hero-content">
-        <h1>
-            <div class="hero-line-wrapper">
-                <span class="hero-line">ARCHITECTING THE</span>
-            </div>
-            <div class="hero-line-wrapper">
-                <span class="hero-line gradient-text typewriter">IMPOSSIBLE</span>
-            </div>
-        </h1>
+        <h1 data-key="hero_title"></h1>
         <div class="hero-desc-wrapper">
-            <p>Elite Tech Architect specializing in high-performance 3D ecosystems, AI integration, and Scalable Cloud Infrastructure. Transforming ambitious visions into reality.</p>
+            <p data-key="hero_description"></p>
         </div>
         <div class="hero-cta">
             <button class="btn btn-primary" onclick="scrollToContact()">Start a Project</button>
@@ -2086,10 +2275,8 @@ font-size: 0.875rem;
 <section id="services" class="fade-in" data-palette="sunset">
     <div class="section-header">
         <span class="section-subtitle">What I Deliver</span>
-        <h2 class="section-title">Elite Services</h2>
-        <p style="color: var(--text-muted); margin-top: 10px; max-width: 600px;">
-            End-to-end technical solutions designed for scale. From architectural planning to final deployment, I handle the entire lifecycle.
-        </p>
+        <h2 class="section-title" data-key="services_title"></h2>
+        <p style="color: var(--text-muted); margin-top: 10px; max-width: 600px;" data-key="services_description"></p>
     </div>
 
     <div class="services-grid">
@@ -2227,40 +2414,57 @@ font-size: 0.875rem;
 </style>
 
 <!-- Admin Modals Overlay -->
-<div id="admin-modal-overlay" class="hidden" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); backdrop-filter: blur(10px); z-index: 100000; display: flex; justify-content: center; align-items: center; font-family: sans-serif;">
-    <div style="background: #0f172a; border: 2px solid #8b5cf6; padding: 2.5rem; border-radius: 20px; width: 95%; max-width: 420px; text-align: center; color: white;">
-        
+<div id="admin-modal-overlay" class="hidden" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); z-index: 100000; display: flex; justify-content: center; align-items: center; font-family: 'General Sans', sans-serif;">
+    <div style="background: radial-gradient(circle at 20% 50%, rgba(139, 92, 246, 0.1) 0%, transparent 50%), linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border: 2px solid rgba(139, 92, 246, 0.6); padding: 2.8rem; border-radius: 24px; width: 95%; max-width: 450px; text-align: center; color: white; box-shadow: 0 20px 60px rgba(139, 92, 246, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);">
+       
         <!-- Step 1: Confirmation -->
         <div id="admin-step-1">
-            <h2 style="color:#8b5cf6; margin-bottom:1rem;">⚠️ Security Alert</h2>
-            <p style="margin-bottom:2rem; color: #94a3b8;">Restricted Access. Are you the System Administrator?</p>
-            <div style="display: flex; gap: 15px; justify-content: center;">
-                <button id="btn-yes-admin" style="background:#8b5cf6; color:white; padding:12px 30px; border-radius:10px; border:none; cursor:pointer; font-weight: bold;">Yes</button>
-                <button id="btn-no-admin" style="background:transparent; border:1px solid #475569; color:#94a3b8; padding:12px 30px; border-radius:10px; cursor:pointer;">Cancel</button>
+            <div style="font-size: 3rem; margin-bottom: 1rem; animation: bounce 2s infinite;">🔐</div>
+            <h2 style="color:#a78bfa; margin-bottom:0.5rem; font-size: 1.8rem; font-weight: 700;">Security Alert</h2>
+            <p style="margin-bottom:2.5rem; color: #cbd5e1; font-size: 0.95rem; line-height: 1.6;">Restricted Admin Access. Are you the System Administrator?</p>
+            <div style="display: flex; gap: 12px; justify-content: center;">
+                <button id="btn-yes-admin" style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); color:white; padding:14px 32px; border-radius:12px; border:none; cursor:pointer; font-weight: 600; transition: all 0.3s ease; box-shadow: 0 10px 25px rgba(139, 92, 246, 0.3);">Yes, Proceed</button>
+                <button id="btn-no-admin" style="background:transparent; border:1.5px solid #475569; color:#cbd5e1; padding:14px 32px; border-radius:12px; cursor:pointer; font-weight: 600; transition: all 0.3s ease;" onmouseover="this.style.borderColor='#8b5cf6'; this.style.color='#a78bfa';" onmouseout="this.style.borderColor='#475569'; this.style.color='#cbd5e1';">Cancel</button>
             </div>
         </div>
 
         <!-- Step 2: Riddle -->
         <div id="admin-step-2" class="hidden">
-            <h2 style="color:#8b5cf6; margin-bottom:1rem;">🧩 Security Check</h2>
-            <p style="margin-bottom:1.5rem; color: #94a3b8;">Riddle: "What is the standard output test?"</p>
-            <input type="text" id="riddle-input" placeholder="Type answer..." style="width:100%; padding:14px; background:#1e293b; border:1px solid #334155; color:white; border-radius:10px; margin-bottom:1rem; text-align: center;">
-            <p id="riddle-error" class="hidden" style="color:#f43f5e; font-size:0.85rem; margin-bottom: 1rem;">❌ Wrong Answer.</p>
-            <button id="btn-check-riddle" style="background:#8b5cf6; color:white; width:100%; padding:14px; border-radius:10px; border:none; cursor:pointer;">Verify</button>
+            <div style="font-size: 2.5rem; margin-bottom: 1rem;">🧩</div>
+            <h2 style="color:#a78bfa; margin-bottom:1.5rem; font-size: 1.8rem; font-weight: 700;">Security Question</h2>
+            <p style="margin-bottom:1.8rem; color: #cbd5e1; background: rgba(139, 92, 246, 0.1); padding: 1rem; border-radius: 12px; border-left: 3px solid #8b5cf6;">"What is the standard output test?"</p>
+            <div style="position: relative; margin-bottom: 1rem;">
+                <input type="text" id="riddle-input" placeholder="Type your answer..." style="width:100%; padding:14px; background:#1e293b; border:2px solid #334155; color:white; border-radius:12px; text-align: center; font-weight: 500; transition: all 0.3s ease;" onpaste="return false;" oncopy="return false;" oncut="return false;" onfocus="this.style.borderColor='#8b5cf6'; this.style.boxShadow='0 0 20px rgba(139, 92, 246, 0.3)';" onblur="this.style.borderColor='#334155'; this.style.boxShadow='none';">
+            </div>
+            <p id="riddle-error" class="hidden" style="color:#f43f5e; font-size:0.9rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem; justify-content: center;">❌ Incorrect answer, try again</p>
+            <button id="btn-check-riddle" style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); color:white; width:100%; padding:14px; border-radius:12px; border:none; cursor:pointer; font-weight: 600; transition: all 0.3s ease; box-shadow: 0 10px 25px rgba(139, 92, 246, 0.3);">Verify Answer</button>
         </div>
 
         <!-- Step 3: Login -->
         <div id="admin-step-3" class="hidden">
-            <h2 style="color:#8b5cf6; margin-bottom:1rem;">🔑 Login</h2>
+            <div style="font-size: 2.5rem; margin-bottom: 1rem;">🔑</div>
+            <h2 style="color:#a78bfa; margin-bottom:2rem; font-size: 1.8rem; font-weight: 700;">Admin Login</h2>
             <form id="admin-login-form">
-                <input type="email" id="admin-email" placeholder="Admin Email" required style="width:100%; padding:14px; background:#1e293b; border:1px solid #334155; color:white; border-radius:10px; margin-bottom:12px;">
-                <input type="password" id="admin-pass" placeholder="Password" required style="width:100%; padding:14px; background:#1e293b; border:1px solid #334155; color:white; border-radius:10px; margin-bottom:1.5rem;">
-                <p id="login-error" class="hidden" style="color:#f43f5e; margin-bottom:1rem; font-size: 0.85rem;"></p>
-                <button type="submit" style="background:#8b5cf6; color:white; width:100%; padding:14px; border-radius:10px; border:none; cursor:pointer;">Login</button>
+                <div style="margin-bottom: 1.2rem;">
+                    <input type="email" id="admin-email" placeholder="Admin Email" required style="width:100%; padding:14px; background:#1e293b; border:2px solid #334155; color:white; border-radius:12px; text-align: center; font-weight: 500; transition: all 0.3s ease;" onfocus="this.style.borderColor='#8b5cf6'; this.style.boxShadow='0 0 20px rgba(139, 92, 246, 0.3)';" onblur="this.style.borderColor='#334155'; this.style.boxShadow='none';">
+                </div>
+                <div class="password-wrapper" style="margin-bottom: 1.8rem;">
+                    <input type="password" id="admin-pass" placeholder="Password" required style="width:100%; padding:14px; background:#1e293b; border:2px solid #334155; color:white; border-radius:12px; text-align: center; font-weight: 500; transition: all 0.3s ease;" onfocus="this.style.borderColor='#8b5cf6'; this.style.boxShadow='0 0 20px rgba(139, 92, 246, 0.3)';" onblur="this.style.borderColor='#334155'; this.style.boxShadow='none';">
+                    <button type="button" class="eye-toggle" id="admin-pass-toggle" title="Toggle Password Visibility">👁️</button>
+                </div>
+                <p id="login-error" class="hidden" style="color:#f43f5e; margin-bottom:1.5rem; font-size: 0.9rem;"></p>
+                <button type="submit" style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); color:white; width:100%; padding:14px; border-radius:12px; border:none; cursor:pointer; font-weight: 600; transition: all 0.3s ease; box-shadow: 0 10px 25px rgba(139, 92, 246, 0.3);">Login Secure</button>
             </form>
         </div>
     </div>
 </div>
+
+<style>
+    @keyframes bounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
+    }
+</style>
 
 <!-- Admin Styles -->
 <style>
@@ -2275,7 +2479,7 @@ font-size: 0.875rem;
     <div class="contact-layout">
         <div class="contact-info">
             <span class="section-subtitle">Let's Connect</span>
-            <h2 class="contact-big-text">Ready to Build Something Extraordinary?</h2>
+            <h2 class="contact-big-text" data-key="contact_title"></h2>
             <p>Available for high-impact projects, technical consulting, and strategic partnerships. Let's discuss how we can push boundaries together.</p>
            
             <a href="mailto:danyorllc@gmail.com" class="contact-email">danyorllc@gmail.com</a>
@@ -2332,7 +2536,7 @@ font-size: 0.875rem;
     </div>
    
     <script>
-        
+       
     // ========== GLOBAL CONFIGURATION (REQUIRED) ==========
     // 🔴 IMPORTANT: Keep empty - will use the 7 API keys from API_KEYS_TO_ADD below
     const GEMINI_API_KEY = "";
@@ -2361,9 +2565,9 @@ font-size: 0.875rem;
         // FIX #11: Removed Console Log
     }
 
-    function saveAIMemory() { 
+    function saveAIMemory() {
         try {
-            sessionStorage.setItem('aiMemory', JSON.stringify(AI_MEMORY)); 
+            sessionStorage.setItem('aiMemory', JSON.stringify(AI_MEMORY));
         } catch(e) {}
     }
 
@@ -2395,12 +2599,12 @@ font-size: 0.875rem;
 
     async function makeGeminiRequest(payload, retries = 2, backoff = 500) {
         // ⚡ FASTEST MODEL: Gemini 2.5 Flash (Supports Search)
-        const MODEL_NAME = 'gemini-2.5-flash-preview-09-2025'; 
-        
+        const MODEL_NAME = 'gemini-2.5-flash-preview-09-2025';
+       
         // 1. AUTO-ROTATING KEY SELECTION (Round-Robin)
         let activeKey = '';
         let isUsingRotation = false;
-        
+       
         if (API_KEYS && API_KEYS.length > 0) {
             // Use automatic round-robin rotation
             activeKey = getNextAPIKey();
@@ -2448,7 +2652,7 @@ font-size: 0.875rem;
             if (res.status === 404) {
                  throw new Error(`MODEL_NOT_FOUND: Gemini service not enabled.`);
             }
-            
+           
             // Retry only on server overload
             if (res.status === 429 || errorMsg.includes('RESOURCE_EXHAUSTED')) {
                 if (retries > 0) {
@@ -2504,7 +2708,7 @@ font-size: 0.875rem;
             setTimeout(() => themeToggle.style.transform = 'rotate(0deg)', 300);
         });
     }
-    
+   
     // Restore theme on page load
     window.addEventListener('DOMContentLoaded', () => {
         const savedTheme = localStorage.getItem('theme') || 'dark';
@@ -2611,7 +2815,7 @@ WEBSITE: https://daniyal.dev
         if (!pricingChatBody) return;
         const div = document.createElement('div');
         div.className = `ai-message ${isUser ? 'user' : ''}`;
-        
+       
         // SECURITY FIX: Treat user input as TEXT, AI input as HTML
         if (isUser) {
             div.innerHTML = `<div class="ai-avatar" style="${isUser ? '' : 'background: var(--primary);'}">${isUser ? 'You' : 'PM'}</div><div class="ai-message-content"></div>`;
@@ -2648,7 +2852,7 @@ WEBSITE: https://daniyal.dev
 
         const query = pricingInput.value.trim();
         if (!query) return;
-        
+       
         // Set AI responding flag to prevent new messages
         isAIResponding = true;
         if (pricingSend) {
@@ -2669,7 +2873,7 @@ WEBSITE: https://daniyal.dev
         // 2. CHECK IF SEARCH IS NEEDED (Smart Search Logic)
         const pricingKeywords = ['price', 'cost', 'budget', 'quote', 'investment', 'rate', 'charge', 'fee', 'how much', 'expensive', 'affordable', '$', 'rupee', 'package', 'tier'];
         const needsSearch = pricingKeywords.some(keyword => qLower.includes(keyword));
-        
+       
         // 3. Loading Animation with conditional messages
         const loadingId = 'loading-' + Date.now();
         const loadingDiv = document.createElement('div');
@@ -2677,10 +2881,10 @@ WEBSITE: https://daniyal.dev
         loadingDiv.className = 'ai-message';
        
         const isGreeting = /^(hi|hello|hey|salam|test)/i.test(qLower) && qLower.length < 10;
-        
+       
         let loadingMessage = '';
         let logMessages = [];
-        
+       
         if (isGreeting) {
             loadingMessage = '💬 Initializing Neural Link...';
         } else if (needsSearch) {
@@ -2759,7 +2963,7 @@ You are NOT a support bot. You are a **Strategic Consultant**.
 - Focus on the ROI and the value Daniyal's services provide.
 - Keep the tone professional but aggressive in closing deals.
 
-        
+       
         **MEMORY CONTEXT:**
         User Name: ${AI_MEMORY.userName || 'Unknown'}
         Interest: ${AI_MEMORY.userInterest || 'Unknown'}
@@ -2774,7 +2978,7 @@ You are NOT a support bot. You are a **Strategic Consultant**.
 
         **INTELLIGENT PROTOCOL (CRITICAL FIX FOR HIGH-VALUE):**
         1. **PORTFOLIO QUESTIONS:** If the user asks about past projects, say: "We operate under strict NDAs for our enterprise clients, but I can walk you through our architectural capabilities relevant to your needs."
-        
+       
         2. **HIGH-INTENT/HIGH-VALUE PROJECT DETECTION:**
            - Scan the user's query for keywords like: 'crypto', 'blockchain', 'exchange', 'metaverse', '3d game', 'custom software', 'SaaS', 'enterprise', 'full stack'.
            - If ANY such keyword is detected, **SKIP THE QUALIFICATION QUESTIONS ENTIRELY** and **IMMEDIATELY PROCEED TO PRICING TIER GENERATION (Rule 4)**. This signals a serious, pre-qualified client.
@@ -2810,7 +3014,7 @@ You are NOT a support bot. You are a **Strategic Consultant**.
             // Use the needsSearch variable already calculated above
             // Build tools array conditionally
             const tools = needsSearch ? [{ "google_search": {} }] : [];
-            
+           
             // Use the multi-key request helper which rotates keys and honors retry info
             let data;
             try {
@@ -2835,17 +3039,17 @@ You are NOT a support bot. You are a **Strategic Consultant**.
 
             // Parsing
             const nameMatch = aiResponse.match(/\[SAVE_NAME:\s*(.*?)\]/);
-            if (nameMatch) { 
-                AI_MEMORY.userName = nameMatch[1].trim(); 
-                aiResponse = aiResponse.replace(nameMatch[0], ''); 
-                saveAIMemory(); 
+            if (nameMatch) {
+                AI_MEMORY.userName = nameMatch[1].trim();
+                aiResponse = aiResponse.replace(nameMatch[0], '');
+                saveAIMemory();
             }
-            
+           
             const interestMatch = aiResponse.match(/\[SAVE_INTEREST:\s*(.*?)\]/);
-            if (interestMatch) { 
-                AI_MEMORY.userInterest = interestMatch[1].trim(); 
-                aiResponse = aiResponse.replace(interestMatch[0], ''); 
-                saveAIMemory(); 
+            if (interestMatch) {
+                AI_MEMORY.userInterest = interestMatch[1].trim();
+                aiResponse = aiResponse.replace(interestMatch[0], '');
+                saveAIMemory();
             }
 
             const budgetMatch = aiResponse.match(/\[BUDGET:\s*(.*?)\]/);
@@ -2902,7 +3106,7 @@ You are NOT a support bot. You are a **Strategic Consultant**.
             if (history.length > 15) history.splice(0, history.length - 15);
            
             sessionStorage.setItem('pricingHistory', JSON.stringify(history));
-            
+           
         } catch (e) {
             if(logInterval) clearInterval(logInterval);
             console.error(e);
@@ -2925,14 +3129,14 @@ You are NOT a support bot. You are a **Strategic Consultant**.
     // 4. LISTENERS with Word Limit & Loading Prevention
     let isAIResponding = false; // Track if AI is currently responding
     let debounceTimer = null; // Debounce timer for input
-    
+   
     if (pricingSend) {
         pricingSend.addEventListener('click', () => {
             if (isAIResponding) return; // Don't send if AI is responding
             handlePricingQuery();
         });
     }
-    
+   
     if (pricingInput) {
         // Word limit validation
         pricingInput.addEventListener('input', function() {
@@ -2944,9 +3148,9 @@ You are NOT a support bot. You are a **Strategic Consultant**.
             this.style.height = 'auto';
             this.style.height = Math.min(this.scrollHeight, 120) + 'px';
         });
-        
+       
         // Enter to send, Shift+Enter for new line
-        pricingInput.addEventListener('keydown', (e) => { 
+        pricingInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') {
                 if (e.shiftKey) {
                     // Shift+Enter: Allow new line (default behavior)
@@ -2966,7 +3170,7 @@ You are NOT a support bot. You are a **Strategic Consultant**.
 
     // CHAT MODE Button Handler - Simple Desktop Scroll
     const chatModeBtn = document.getElementById('chat-mode-btn');
-    
+   
     if(chatModeBtn) {
         chatModeBtn.addEventListener('click', () => {
             // Desktop: Scroll to estimator
@@ -3003,7 +3207,7 @@ You are NOT a support bot. You are a **Strategic Consultant**.
         // 🎯 MOBILE DETECTION & OPTIMIZATION
         const isMobile = window.innerWidth < 768;
         const isTablet = window.innerWidth < 1024;
-        
+       
         if (isMobile) {
             canvas.style.display = 'none';
             return;
@@ -3013,7 +3217,7 @@ You are NOT a support bot. You are a **Strategic Consultant**.
         let mouse = { x: 0, y: 0 };
         let particlesMesh, reactorMesh, pLight1, pLight2;
         let ring1, ring2, ring3;
-        
+       
         // 🎨 SCROLL-BASED COLOR PALETTES (Dark & Vibrant)
         const COLOR_PALETTES = {
             default: { primary: 0x7c3aed, secondary: 0x06b6d4, fog: 0x0a0a0f }, // Deep Purple/Cyan
@@ -3114,10 +3318,10 @@ You are NOT a support bot. You are a **Strategic Consultant**.
 
             // 5. ORBITAL RINGS (Gyroscope Effect)
             const ringGeo = new THREE.TorusGeometry(3.5, 0.025, 16, 100);
-            const ringMat = new THREE.MeshBasicMaterial({ 
-                color: currentPalette.secondary, 
-                transparent: true, 
-                opacity: 0.4 
+            const ringMat = new THREE.MeshBasicMaterial({
+                color: currentPalette.secondary,
+                transparent: true,
+                opacity: 0.4
             });
            
             ring1 = new THREE.Mesh(ringGeo, ringMat);
@@ -3159,11 +3363,11 @@ You are NOT a support bot. You are a **Strategic Consultant**.
 
                 if (newPalette !== currentPalette) {
                     currentPalette = newPalette;
-                    
+                   
                     // Update colors smoothly
                     gsap.to(pLight1.color, { r: ((newPalette.primary >> 16) & 255) / 255, g: ((newPalette.primary >> 8) & 255) / 255, b: (newPalette.primary & 255) / 255, duration: 0.8 });
                     gsap.to(pLight2.color, { r: ((newPalette.secondary >> 16) & 255) / 255, g: ((newPalette.secondary >> 8) & 255) / 255, b: (newPalette.secondary & 255) / 255, duration: 0.8 });
-                    
+                   
                     reactorMesh.material.emissive.setHex(newPalette.primary);
                     scene.fog.color.setHex(newPalette.fog);
                     ring1.material.color.setHex(newPalette.secondary);
@@ -3179,7 +3383,7 @@ You are NOT a support bot. You are a **Strategic Consultant**.
             const animate = () => {
                 // STOP ANIMATION IF TAB IS HIDDEN
                 if (document.hidden) {
-                    setTimeout(animate, 500); 
+                    setTimeout(animate, 500);
                     return;
                 }
 
@@ -3511,7 +3715,7 @@ You are NOT a support bot. You are a **Strategic Consultant**.
                     contactForm.reset();
                     // Reset styling
                     Object.values(formFields).forEach(f => f.classList.remove('success'));
-                    
+                   
                     if(document.getElementById('budget-badge')) document.getElementById('budget-badge').style.display = 'none';
                     confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
                     setTimeout(() => formSuccess.classList.remove('show'), 5000);
@@ -3565,22 +3769,21 @@ You are NOT a support bot. You are a **Strategic Consultant**.
         const preloader = document.getElementById('preloader');
         const loaderFill = document.getElementById('loader-fill');
        
+        // Keep preloader visible until Firebase loads content
+        // Don't hide it here - let loadContentFromDB() handle it
         if (loaderFill) loaderFill.style.width = '100%';
        
-        setTimeout(() => {
-            if (preloader) preloader.classList.add('hidden');
-            try {
-                // Initialize in correct order
-                init3DScene();
-            } catch (e) {
-                // Removed console error per Fix #11
-            }
-        }, 800);
+        try {
+            // Initialize in correct order
+            init3DScene();
+        } catch (e) {
+            // Removed console error per Fix #11
+        }
     });
-    
+   
 </script>
 <script type="module">
-        
+       
     // ========== FIREBASE CONFIGURATION (UPDATED WITH YOUR KEYS) ==========
 const firebaseConfig = {
     apiKey: "AIzaSyAFMw9j2sAw3KFjlYNjejHR_MIEgz6gJ6c",
@@ -3607,18 +3810,116 @@ if (window.location.protocol === 'file:') {
 // Import Firebase SDKs
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getFirestore, doc, getDoc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-const appId = 'protfolio-d737e'; 
+const appId = 'protfolio-d737e';
 
 let stealthBtn, modalOverlay, step1, step2, step3, saveBtn, adminStatus;
 let editModeActive = false;
 let fullEditActive = false;
+
+// ========== FIRESTORE AUTO-LOAD DEBUG FUNCTION ==========
+window.debugFirestoreLoad = function() {
+    console.log("🔍 FIRESTORE AUTO-LOAD DEBUG:");
+    console.log("1️⃣ Page load event fired? Check console");
+    console.log("2️⃣ Elements loaded? Count:", document.querySelectorAll('[data-key]').length);
+    console.log("3️⃣ Firebase initialized? ", !!db);
+    console.log("4️⃣ Auth status? ", auth.currentUser?.email || "Not logged in");
+    console.log("5️⃣ Real-time listener active? ", !!window.stopDBListener);
+};
+
+// ========== FIRESTORE DIAGNOSTIC & RULES CHECK ==========
+window.checkFirestoreRules = async function() {
+    console.log("🔍 CHECKING FIRESTORE SECURITY RULES...");
+   
+    if (!auth.currentUser) {
+        console.error("❌ Not logged in! Login first to test rules.");
+        return false;
+    }
+   
+    try {
+        // Test write to site_content/homepage
+        const testRef = doc(db, 'site_content', 'homepage');
+        await setDoc(testRef, { _test: true }, { merge: true });
+        console.log("✅ FIRESTORE RULES ARE CORRECT! Write access granted.");
+        return true;
+    } catch (error) {
+        if (error.code === 'permission-denied') {
+            console.error("❌ PERMISSION DENIED! Firestore Security Rules are blocking writes.");
+            console.error("📝 FIX: Go to Firebase Console > Firestore > Rules and set:");
+            console.log(`
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Allow authenticated users to read/write their data
+    match /{document=**} {
+      allow read, write: if request.auth != null;
+    }
+  }
+}
+            `);
+            return false;
+        } else {
+            console.error("❌ Other Error:", error.message);
+            return false;
+        }
+    }
+};
+
+// Auto-check rules on page load (silent, non-blocking)
+window.addEventListener('load', () => {
+    setTimeout(() => {
+        if (auth.currentUser) {
+            window.checkFirestoreRules();
+        }
+    }, 2000);
+});
+
+// ========== FIRESTORE RULES REFERENCE (Copy to Firebase Console) ==========
+/*
+
+🔐 FIRESTORE SECURITY RULES FOR PORTFOLIO TEXT EDITING
+(صرف TEXT content save/load - CSS styling محفوظ رہے گی)
+
+Copy ye rules اپنے Firebase Console > Firestore > Rules میں:
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+   
+    // 📝 Portfolio Text Content - صرف TEXT save/load ہو
+    match /site_content/{document=**} {
+     
+      // ✅ کوئی بھی portfolio content پڑھ سکتا ہے (Read-Only for public)
+      allow read: if true;
+     
+      // ✅ صرف ADMIN لوگ متھ کر authentication کے بعد TEXT change کر سکتے ہیں
+      allow write: if request.auth != null && request.resource.size() < 50000;
+     
+      // ✅ Extra validation: Delete کو block کریں (صرف Update ہو)
+      allow delete: if false;
+    }
+   
+  }
+}
+
+📌 RULES EXPLANATION:
+- request.auth != null → Sirf logged-in users (Admin)
+- request.resource.size() < 50000 → 50KB سے بڑا data نہیں (prevent abuse)
+- allow delete: if false → accidentally delete نہ ہو جائے
+
+NEXT STEP:
+1. Firebase Console کھولو
+2. Firestore Database → Rules tab
+3. اوپر والے rules کو copy-paste کرو
+4. "Publish" button دبا
+
+*/
 
 function initElements() {
     stealthBtn = document.getElementById('admin-stealth-btn');
@@ -3628,37 +3929,36 @@ function initElements() {
     step3 = document.getElementById('admin-step-3');
     saveBtn = document.getElementById('admin-save-btn');
     adminStatus = document.getElementById('admin-status-indicator');
-    
+   
     return !!(stealthBtn && modalOverlay);
 }
 
 // ========== LAYER 1: TOGGLE SHORTCUT (Ctrl + Alt + A) ==========
 document.addEventListener('keydown', (e) => {
-    const isAPressed = e.key.toLowerCase() === 'a' || e.code === 'KeyA';
-    
-    if (e.ctrlKey && e.altKey && isAPressed) {
-        e.preventDefault(); 
-        
-        if (editModeActive) {
-            console.log("🔒 Deactivating Admin Mode via Shortcut...");
-            disableAdminMode();
-        } else {
-            console.log("🕵️ Stealth Protocol: Activation Shortcut Detected!");
-            if (!stealthBtn || !modalOverlay) initElements();
-            
-            if (stealthBtn) {
-                // Toggle stealth button visibility
-                const isHidden = stealthBtn.classList.contains('hidden');
-                if (isHidden) {
-                    stealthBtn.classList.remove('hidden');
-                    stealthBtn.style.display = 'block';
-                    console.log("✅ Admin Access Button visible. Click it to login.");
-                } else {
-                    stealthBtn.classList.add('hidden');
-                    stealthBtn.style.display = 'none';
-                    console.log("🙈 Admin Access Button hidden.");
-                }
-            }
+    // صرف Ctrl + Alt + A کو check کریں
+    if (e.ctrlKey && e.altKey && (e.key === 'a' || e.key === 'A')) {
+        e.preventDefault();
+        console.log("🎯 Shortcut detected: Ctrl+Alt+A");
+       
+        // Elements initialize کریں
+        initElements();
+       
+        // Admin modal کھولیں
+        if (modalOverlay) {
+            modalOverlay.classList.remove('hidden');
+            modalOverlay.style.display = 'flex';
+            console.log("✅ Admin modal opened!");
+        }
+       
+        // Step 1 دکھائیں
+        if (step1) {
+            step1.classList.remove('hidden');
+        }
+        if (step2) {
+            step2.classList.add('hidden');
+        }
+        if (step3) {
+            step3.classList.add('hidden');
         }
     }
 });
@@ -3691,8 +3991,13 @@ function openModal() {
     }
 }
 
-function closeModals() { 
-    if (modalOverlay) modalOverlay.classList.add('hidden'); 
+function closeModals() {
+    if (modalOverlay) modalOverlay.classList.add('hidden');
+    // Riddle input کو ہمیشہ clear کریں - دوبارہ security question پوچھے
+    const riddleInput = document.getElementById('riddle-input');
+    if (riddleInput) riddleInput.value = '';
+    const riddleError = document.getElementById('riddle-error');
+    if (riddleError) riddleError.classList.add('hidden');
 }
 
 // Button Events
@@ -3702,11 +4007,35 @@ document.addEventListener('click', (e) => {
     if (e.target.id === 'btn-check-riddle') {
         const riddleInput = document.getElementById('riddle-input');
         if (riddleInput && riddleInput.value.toLowerCase().trim() === 'hello world') {
+            // Correct answer - صرف ایک بار accept
             showStep(3);
-        } else { 
+            // Input کو clear کریں تاکہ دوبارہ نہ لکھا جا سکے
+            riddleInput.value = '';
+        } else {
             const error = document.getElementById('riddle-error');
-            if (error) error.classList.remove('hidden'); 
-            setTimeout(closeModals, 1500); 
+            if (error) error.classList.remove('hidden');
+            // Clear input after error
+            riddleInput.value = '';
+            setTimeout(closeModals, 1500);
+        }
+    }
+});
+
+// Eye Icon Toggle for Password Visibility
+document.addEventListener('click', (e) => {
+    if (e.target.id === 'admin-pass-toggle') {
+        e.preventDefault();
+        const passInput = document.getElementById('admin-pass');
+        const eyeBtn = e.target;
+       
+        if (passInput.type === 'password') {
+            passInput.type = 'text';
+            eyeBtn.textContent = '👁️‍🗨️';
+            eyeBtn.title = 'Hide Password';
+        } else {
+            passInput.type = 'password';
+            eyeBtn.textContent = '👁️';
+            eyeBtn.title = 'Show Password';
         }
     }
 });
@@ -3744,7 +4073,7 @@ function showStep(num) {
 function enableAdminMode() {
     editModeActive = true;
     if (!stealthBtn) initElements();
-    
+   
     // UI Update
     if (stealthBtn) {
         stealthBtn.classList.remove('hidden');
@@ -3759,15 +4088,25 @@ function enableAdminMode() {
     if (editBtn) { editBtn.classList.remove('hidden'); editBtn.style.display = 'inline-flex'; }
     if (adminStatus) adminStatus.classList.remove('hidden');
 
-    // Content Editing Activate (More Robust)
+    // Display sort keys in admin panel
     const editables = document.querySelectorAll('[data-editable]');
+    let keysHTML = '<strong>📋 Edit Keys:</strong><br>';
+    editables.forEach(el => {
+        const key = el.getAttribute('data-key') || el.getAttribute('id') || 'unknown';
+        keysHTML += `<small>• ${key}</small><br>`;
+    });
+    if (adminStatus) {
+        adminStatus.innerHTML = keysHTML;
+    }
+
+    // Content Editing Activate (More Robust)
     editables.forEach(el => {
         el.contentEditable = "true";
         el.classList.add('admin-editable-highlight');
         el.style.border = "2px dashed #10b981"; // Direct style for visibility
         el.title = "Click to edit this content";
     });
-    
+   
     console.log("🔓 ADMIN MODE ACTIVATED: Site is now editable.");
 }
 
@@ -3796,7 +4135,7 @@ function disableAdminMode() {
     editables.forEach(el => {
         el.contentEditable = "false";
         el.classList.remove('admin-editable-highlight');
-        el.style.border = "none"; 
+        el.style.border = "none";
         el.title = "";
     });
 
@@ -3808,29 +4147,91 @@ function toggleFullEditMode(forceState) {
     const state = typeof forceState === 'boolean' ? forceState : !fullEditActive;
     fullEditActive = state;
 
-    // show/hide save button
-    if (saveBtn) {
-        if (fullEditActive) { saveBtn.classList.remove('hidden'); saveBtn.style.display = 'inline-flex'; }
-        else { saveBtn.classList.add('hidden'); saveBtn.style.display = 'none'; }
+    // Initialize elements پہلے
+    if (!saveBtn) initElements();
+
+    // EDIT button stays same - just toggle on/off
+    const editBtn = document.getElementById('admin-edit-btn');
+    if (editBtn) {
+        editBtn.innerText = '✏️ EDIT';
     }
 
-    // pick elements to make editable: skip scripts, styles, inputs, buttons, links
-    const selector = 'body *:not(script):not(style):not(link):not(meta):not(head):not(input):not(textarea):not(select):not(button):not(a)';
-    const nodes = Array.from(document.querySelectorAll(selector));
-    nodes.forEach((el, idx) => {
+    // show/hide save button - SAVE CHANGES button ہونی چاہیے
+    // صرف SHOW کریں جب edit mode ON ہو
+    if (saveBtn) {
+        if (fullEditActive) {
+            saveBtn.classList.remove('hidden');
+            saveBtn.style.display = 'inline-flex';
+            saveBtn.innerText = 'SAVE CHANGES';
+            console.log('✅ SAVE CHANGES button shown');
+        }
+        // جب edit mode OFF ہو تو button hide نہ کریں - صرف SAVE button کے بعد hide ہوگا
+    }
+
+    // صرف LEAF elements کو editable بنائیں - جن میں child elements نہیں ہوں
+    const allElements = document.querySelectorAll('body *:not(script):not(style):not(link):not(meta):not(head)');
+   
+    let editableCount = 0;
+    allElements.forEach((el) => {
+        // Skip اگر element کے child element ہوں
+        const hasChildElements = Array.from(el.children).some(child =>
+            child.nodeType === 1 &&
+            !['BR', 'IMG', 'INPUT', 'BUTTON'].includes(child.tagName)
+        );
+       
+        if (hasChildElements) return;
+       
+        // Skip certain tags
+        if (['SCRIPT', 'STYLE', 'INPUT', 'TEXTAREA', 'BUTTON', 'SELECT', 'A'].includes(el.tagName)) return;
+       
         if (state) {
-            el.contentEditable = 'true';
-            el.classList.add('admin-editable-highlight');
-            // ensure element has a data-key so it can be saved
+            // ✅ ALWAYS set data-key - یہ FIX ہے!
             if (!el.getAttribute('data-key')) {
-                const genKey = `auto_${el.tagName.toLowerCase()}_${idx}`;
-                el.setAttribute('data-key', genKey);
+                let key = el.getAttribute('id');
+                if (!key) {
+                    const path = [];
+                    let node = el;
+                    while (node && node !== document.body) {
+                        const index = Array.from(node.parentNode.children).indexOf(node);
+                        path.unshift(`${node.tagName.toLowerCase()}_${index}`);
+                        node = node.parentNode;
+                    }
+                    key = `auto_${path.join('_')}`;
+                }
+                el.setAttribute('data-key', key);
+                console.log(`🔑 Generated data-key: ${key} for ${el.tagName}`);
             }
+           
+            // صرف text content کو editable بنائیں
+            el.contentEditable = 'true';
+            el.spellcheck = 'false';
+            el.classList.add('admin-editable-highlight');
+            el.setAttribute('data-editable', 'true');
+           
+            el.style.cursor = 'text';
+            el.style.pointerEvents = 'auto';
+           
+            editableCount++;
         } else {
             el.contentEditable = 'false';
             el.classList.remove('admin-editable-highlight');
+            el.style.cursor = 'auto';
+            el.removeAttribute('data-editable');
         }
     });
+   
+    console.log(`${state ? '✅ EDIT MODE ON' : '🔒 EDIT MODE OFF'} - ${editableCount} elements with data-key`);
+   
+    // Focus پر پہلی editable element میں
+    if (state) {
+        const firstEditable = document.querySelector('[data-editable="true"]');
+        if (firstEditable) {
+            setTimeout(() => {
+                firstEditable.focus();
+                console.log('🎯 Focus set');
+            }, 100);
+        }
+    }
 }
 
 // ========== DATABASE SYNC (SAVE/LOAD) ==========
@@ -3838,64 +4239,253 @@ function toggleFullEditMode(forceState) {
 document.addEventListener('click', async (e) => {
     if (e.target.id === 'admin-edit-btn') {
         if (!auth.currentUser) return;
-        toggleFullEditMode();
+        toggleFullEditMode(); // Simple toggle
         return;
     }
 
     if (e.target.id === 'admin-save-btn') {
-        if (!auth.currentUser) return;
+        if (!auth.currentUser) {
+            alert('❌ Please login first');
+            console.error("No authenticated user!");
+            return;
+        }
         const sBtn = e.target;
         sBtn.innerText = "Saving...";
         sBtn.disabled = true;
 
         const contentData = {};
-        // collect any element that is explicitly editable or currently contentEditable
-        const candidates = Array.from(document.querySelectorAll('[data-editable], [contenteditable="true"]'));
-        candidates.forEach((el, i) => {
-            let key = el.getAttribute('data-key');
-            if (!key) {
-                key = `auto_${el.tagName.toLowerCase()}_${i}`;
-                el.setAttribute('data-key', key);
+       
+        // تمام elements تلاش کریں جن میں data-key ہے - اور اگر کوئی نہیں ہے تو پہلے generate کریں
+        let candidates = Array.from(document.querySelectorAll('[data-key]'));
+       
+        console.log(`🔍 STEP 1: Found ${candidates.length} total elements with data-key`);
+       
+        // اگر کوئی element نہیں ملے تو پہلے edit mode trigger کریں
+        if (candidates.length === 0) {
+            console.warn("⚠️ No data-key elements found. Generating keys automatically...");
+           
+            // Trigger full edit mode to generate data-keys
+            if (!fullEditActive) {
+                toggleFullEditMode(true);
+                console.log("✅ Generated data-keys via toggleFullEditMode");
+               
+                // اب دوبارہ query کریں
+                candidates = Array.from(document.querySelectorAll('[data-key]'));
+                console.log(`🔍 STEP 2: After generation, found ${candidates.length} elements with data-key`);
             }
-            contentData[key] = el.innerText;
+        }
+       
+        // ✅ Filter: صرف meaningful content save کریں
+        candidates.forEach((el) => {
+            let key = el.getAttribute('data-key');
+            const text = (el.textContent || el.innerText || '').trim();
+           
+            // Skip empty, very short, or auto-generated keys
+            if (text && text.length > 5) {  // کم سے کم 5 characters
+                contentData[key] = text;
+                console.log(`💾 Saving: ${key} → "${text.substring(0, 40)}..."`);
+            } else {
+                console.log(`⏭️ Skipping: ${key} (too short: "${text.substring(0, 20)}")`);
+            }
         });
 
+        if (Object.keys(contentData).length === 0) {
+            console.warn("⚠️ CRITICAL: No valid content found to save!");
+            console.warn("Elements found:", candidates.length);
+            console.warn("Usable content keys:", Object.keys(contentData).length);
+            sBtn.innerText = "❌ No content";
+            sBtn.disabled = false;
+            alert("❌ No valid content to save!\n\nEdit some text (at least 5 characters) and try again.");
+            return;
+        }
+
         try {
-            const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'site_content', 'main_page');
-            await setDoc(docRef, contentData, { merge: true });
+            console.log("🔄 STEP 3: Connecting to Firebase...");
+            console.log("👤 Current User:", auth.currentUser?.email);
+            console.log("🔐 User UID:", auth.currentUser?.uid);
+            const docRef = doc(db, 'site_content', 'homepage');
+            console.log("📍 Firestore Path: site_content/homepage");
+            console.log("💾 Saving", Object.keys(contentData).length, "content fields:");
+            console.table(contentData);
+           
+            // Save with timeout
+            const savePromise = setDoc(docRef, contentData, { merge: true });
+            const timeoutPromise = new Promise((_, reject) =>
+                setTimeout(() => reject(new Error('Save timeout - Firestore response took >15 seconds')), 15000)
+            );
+           
+            await Promise.race([savePromise, timeoutPromise]);
+           
+            console.log("✅ Firebase save successful!");
+           
+            // ✅ Edit mode automatically turn off
+            if (fullEditActive) {
+                toggleFullEditMode(false);
+                console.log("🔒 Edit mode turned off after save");
+            }
+           
             sBtn.innerText = "✓ Saved!";
+            console.log("✅ Text saved:", contentData);
             setTimeout(() => {
                 sBtn.innerText = "SAVE CHANGES";
                 sBtn.disabled = false;
+                // اب button کو hide کریں
+                if (saveBtn) {
+                    saveBtn.classList.add('hidden');
+                    saveBtn.style.display = 'none';
+                    console.log('🔒 SAVE CHANGES button hidden after save');
+                }
             }, 2000);
         } catch (error) {
-            console.error("Firebase Save Error:", error);
-            sBtn.innerText = "❌ Error";
+            console.error("❌ ========== SAVE ERROR DETAILS ==========");
+            console.error("Error Code:", error.code);
+            console.error("Error Message:", error.message);
+            console.error("Full Error Object:", error);
+           
+            // Better error messages with solutions
+            let displayMsg = error.message;
+            let solution = "";
+           
+            if (error.code === 'permission-denied') {
+                displayMsg = "❌ PERMISSION DENIED";
+                solution = `
+🔧 SOLUTION:
+1. Go to Firebase Console → Firestore Database → Rules
+2. Replace the rules with:
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if request.auth != null;
+    }
+  }
+}
+
+3. Click "Publish"
+4. Come back and try saving again
+                `;
+                console.error(solution);
+            } else if (error.code === 'unauthenticated') {
+                displayMsg = "❌ NOT AUTHENTICATED";
+                solution = "Please login again with admin credentials";
+            } else if (error.message.includes('timeout')) {
+                displayMsg = "❌ CONNECTION TIMEOUT";
+                solution = "Firebase took too long to respond. Check your internet connection.";
+            } else if (error.message.includes('not-found')) {
+                displayMsg = "❌ COLLECTION NOT FOUND";
+                solution = "Create 'site_content' collection in Firebase Firestore first";
+            }
+           
+            console.error("💡 SUGGESTED FIX:", solution);
+           
+            sBtn.innerText = `❌ Error`;
             sBtn.disabled = false;
+           
+            alert(`
+${displayMsg}
+
+${solution}
+
+📘 Check console (F12) for full error details.
+            `);
         }
     }
 });
 
-async function loadContentFromDB() {
+function loadContentFromDB() {
     try {
-        const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'site_content', 'main_page');
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-            console.log("📥 Loading content from Database...");
-            const data = docSnap.data();
-            Object.keys(data).forEach(key => {
-                const el = document.querySelector(`[data-key="${key}"]`);
-                if (el) el.innerText = data[key];
-            });
-        }
+        console.log("🔄 STARTING AUTO-LOAD FROM FIRESTORE...");
+       
+        // ✅ SET LOADING STATE
+        document.body.classList.add('firestore-loading');
+        document.body.classList.remove('firestore-loaded');
+        console.log("⏳ Content hidden - waiting for Firestore...");
+       
+        const docRef = doc(db, 'site_content', 'homepage');
+       
+        // Real-time listener - automatically update jab bhi data change ho
+        const unsubscribe = onSnapshot(docRef, (docSnap) => {
+            if (docSnap.exists()) {
+                console.log("✅ FIRESTORE DATA LOADED!");
+                const data = docSnap.data();
+                console.log("📊 Data received:", Object.keys(data).length, "fields");
+               
+                Object.keys(data).forEach(key => {
+                    // data-key سے تلاش کریں
+                    let el = document.querySelector(`[data-key="${key}"]`);
+                   
+                    if (el) {
+                        const currentText = el.textContent || el.innerText;
+                        if (currentText !== data[key]) {
+                            // صرف text content update کریں - styling محفوظ رہے
+                            el.textContent = data[key];
+                            console.log(`✅ Updated: ${key}`);
+                        }
+                    } else {
+                        console.warn(`⚠️ Element [data-key="${key}"] not found on page`);
+                    }
+                });
+               
+                console.log("✅ CONTENT FULLY LOADED & UPDATED!");
+               
+                // ✅ HIDE PRELOADER & SHOW CONTENT TOGETHER
+                const preloader = document.getElementById('preloader');
+                if (preloader) preloader.classList.add('hidden');
+               
+                document.body.classList.remove('firestore-loading');
+                document.body.classList.add('firestore-loaded');
+                console.log("✅ Content is now visible!");
+               
+            } else {
+                console.warn("⚠️ No data in Firestore yet - using default content");
+                // Still show content if no Firestore data
+                const preloader = document.getElementById('preloader');
+                if (preloader) preloader.classList.add('hidden');
+                document.body.classList.remove('firestore-loading');
+                document.body.classList.add('firestore-loaded');
+            }
+        }, (error) => {
+            console.error("❌ Real-time Load Error:", error.code, error.message);
+            // Show content even on error
+            const preloader = document.getElementById('preloader');
+            if (preloader) preloader.classList.add('hidden');
+            document.body.classList.remove('firestore-loading');
+            document.body.classList.add('firestore-loaded');
+        });
+       
+        // Store listener reference to stop later if needed
+        window.stopDBListener = unsubscribe;
+        console.log("🔔 Real-time listener activated");
+       
     } catch (error) {
-        console.error("Load Error:", error);
+        console.error("❌ Load Error:", error);
+        // Show content on exception
+        const preloader = document.getElementById('preloader');
+        if (preloader) preloader.classList.add('hidden');
+        document.body.classList.remove('firestore-loading');
+        document.body.classList.add('firestore-loaded');
     }
 }
 
+// ✅ AUTO-LOAD ON PAGE LOAD
 window.addEventListener('load', () => {
+    console.log("📄 PAGE LOAD - Starting initialization...");
     initElements();
+   
+    // ✅ IMMEDIATE FIRESTORE LOAD
+    console.log("🚀 Loading content from Firestore...");
     loadContentFromDB();
+   
+    console.log("✅ Initialization complete!");
+   
+    // Also auto-check rules after 2 seconds (non-blocking)
+    setTimeout(() => {
+        if (auth.currentUser) {
+            console.log("🔐 Checking Firestore rules...");
+            window.checkFirestoreRules();
+        }
+    }, 2000);
 });
     </script>
 
